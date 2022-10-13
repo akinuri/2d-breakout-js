@@ -39,6 +39,7 @@ for (let columnIndex = 0; columnIndex < brickColumnCount; columnIndex++) {
 }
 
 let score = 0;
+let lives = 3;
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -47,6 +48,7 @@ function draw() {
     drawPaddle();
     collisionDetection();
     drawScore();
+    drawLives();
     if (ballX + ballDeltaX > canvas.width-ballRadius || ballX + ballDeltaX < ballRadius) {
         ballDeltaX = -ballDeltaX;
     }
@@ -56,10 +58,20 @@ function draw() {
         if (ballX > paddleX && ballX < paddleX + paddleWidth) {
             ballDeltaY = -ballDeltaY;
         } else {
-            clearTimeout(timeout);
-            alert("GAME OVER");
-            document.location.reload();
-            return;
+            lives--;
+            if (!lives) {
+                clearTimeout(timeout);
+                alert("GAME OVER");
+                document.location.reload();
+                return;
+            }
+            else {
+                ballX = canvas.width / 2;
+                ballY = canvas.height - paddleHeight - paddleMargin - ballRadius;
+                ballDeltaX = 2 * Math.round(Math.random()) ? 1 : -1;
+                ballDeltaY = -2;
+                paddleX = (canvas.width - paddleWidth) / 2;
+            }
         }
     }
     if (rightPressed) {

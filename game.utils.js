@@ -89,3 +89,9 @@ function drawScore() {
     ctx.fillStyle = "black";
     ctx.fillText(`Score: ${score}`, 8, 22);
 }
+
+function drawLives() {
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "black";
+    ctx.fillText(`Lives: ${lives}`, canvas.width - 65, 22);
+}
