@@ -30,10 +30,10 @@ let brickOffsetTop = 30;
 let brickOffsetLeft = 30;
 
 let bricks = [];
-for (var c = 0; c < brickColumnCount; c++) {
-    bricks[c] = [];
-    for (var r = 0; r < brickRowCount; r++) {
-        bricks[c][r] = { x: 0, y: 0 };
+for (let columnIndex = 0; columnIndex < brickColumnCount; columnIndex++) {
+    bricks[columnIndex] = [];
+    for (let rowIndex = 0; rowIndex < brickRowCount; rowIndex++) {
+        bricks[columnIndex][rowIndex] = { x: 0, y: 0 };
     }
 }
 

@@ -17,12 +17,12 @@ function keyUpHandler(e) {
 }
 
 function drawBricks() {
-    for (var c = 0; c < brickColumnCount; c++) {
-        for (var r = 0; r < brickRowCount; r++) {
-            var brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft;
-            var brickY = (r * (brickHeight + brickPadding)) + brickOffsetTop;
-            bricks[c][r].x = brickX;
-            bricks[c][r].y = brickY;
+    for (let columnIndex = 0; columnIndex < brickColumnCount; columnIndex++) {
+        for (let rowIndex = 0; rowIndex < brickRowCount; rowIndex++) {
+            let brickX = (columnIndex * (brickWidth + brickPadding)) + brickOffsetLeft;
+            let brickY = (rowIndex * (brickHeight + brickPadding)) + brickOffsetTop;
+            bricks[columnIndex][rowIndex].x = brickX;
+            bricks[columnIndex][rowIndex].y = brickY;
             ctx.beginPath();
             ctx.rect(brickX, brickY, brickWidth, brickHeight);
             ctx.fillStyle = "hsl(0, 60%, 50%)";
