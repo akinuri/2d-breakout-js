@@ -60,7 +60,7 @@ function draw() {
         } else {
             lives--;
             if (!lives) {
-                clearTimeout(timeout);
+                cancelAnimationFrame(raf);
                 alert("GAME OVER");
                 document.location.reload();
                 return;
@@ -88,7 +88,7 @@ function draw() {
     }
     ballX += ballDeltaX;
     ballY += ballDeltaY;
-    timeout = setTimeout(draw, 10);
+    raf = requestAnimationFrame(draw);
 }
-let timeout = null;
+let raf = null;
 draw();

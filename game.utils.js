@@ -72,7 +72,7 @@ function collisionDetection() {
                     brick.intact = false;
                     score++;
                     if (score === brickRowCount * brickColumnCount) {
-                        clearTimeout(timeout);
+                        cancelAnimationFrame(raf);
                         alert("YOU WIN, CONGRATULATIONS!");
                         document.location.reload();
                         return false;
