@@ -42,7 +42,7 @@ function drawBall() {
 
 function drawPaddle() {
     ctx.beginPath();
-    ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+    ctx.rect(paddleX, canvas.height - paddleHeight - paddleMargin, paddleWidth, paddleHeight);
     ctx.fillStyle = "hsl(210, 60%, 50%)";
     ctx.fill();
     ctx.closePath();
