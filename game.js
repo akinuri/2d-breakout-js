@@ -26,7 +26,7 @@ let brickColumnCount = 5;
 let brickWidth = 75;
 let brickHeight = 20;
 let brickPadding = 10;
-let brickOffsetTop = 30;
+let brickOffsetTop = 40;
 let brickOffsetLeft = 30;
 
 let bricks = [];
@@ -37,12 +37,15 @@ for (let columnIndex = 0; columnIndex < brickColumnCount; columnIndex++) {
     }
 }
 
+let score = 0;
+
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBricks();
     drawBall();
     drawPaddle();
     collisionDetection();
+    drawScore();
     if (ballX + ballDeltaX > canvas.width-ballRadius || ballX + ballDeltaX < ballRadius) {
         ballDeltaX = -ballDeltaX;
     }

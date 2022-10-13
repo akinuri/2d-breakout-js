@@ -63,8 +63,22 @@ function collisionDetection() {
                 ) {
                     ballDeltaY *= -1;
                     brick.intact = false;
+                    score++;
+                    if (score === brickRowCount * brickColumnCount) {
+                        clearTimeout(timeout);
+                        alert("YOU WIN, CONGRATULATIONS!");
+                        document.location.reload();
+                        return false;
+                    }
                 }
             }
         }
     }
+    return true;
+}
+
+function drawScore() {
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "black";
+    ctx.fillText(`Score: ${score}`, 8, 22);
 }
