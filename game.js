@@ -20,6 +20,7 @@ let leftPressed = false;
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
+document.addEventListener("mousemove", mouseMoveHandler, false);
 
 let brickRowCount = 3;
 let brickColumnCount = 5;

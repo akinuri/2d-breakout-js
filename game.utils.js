@@ -16,6 +16,13 @@ function keyUpHandler(e) {
     }
 }
 
+function mouseMoveHandler(e) {
+    const relativeX = e.clientX - canvas.offsetLeft;
+    if (relativeX > 0 && relativeX < canvas.width) {
+        paddleX = relativeX - paddleWidth / 2;
+    }
+}
+
 function drawBricks() {
     for (let columnIndex = 0; columnIndex < brickColumnCount; columnIndex++) {
         for (let rowIndex = 0; rowIndex < brickRowCount; rowIndex++) {
