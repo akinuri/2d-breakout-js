@@ -2,19 +2,17 @@
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
 
-let x = canvas.width / 2;
-let y = canvas.height - 30;
-
-let dx = 2;
-let dy = -2;
-
-const ballRadius = 10;
-
-const paddleHeight = 10;
 const paddleWidth = 70;
+const paddleHeight = 10;
 const paddleSpeed = paddleWidth * 0.1;
 const paddleSensitivity = 0.5;
 let paddleX = (canvas.width - paddleWidth) / 2;
+
+const ballRadius = 10;
+let ballX = canvas.width / 2;
+let ballY = canvas.height - paddleHeight - ballRadius;
+let ballDeltaX = 2 * Math.round(Math.random()) ? 1 : -1;
+let ballDeltaY = -2;
 
 let rightPressed = false;
 let leftPressed = false;
@@ -26,18 +24,19 @@ function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBall();
     drawPaddle();
-    if (x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
-        dx = -dx;
+    if (ballX + ballDeltaX > canvas.width-ballRadius || ballX + ballDeltaX < ballRadius) {
+        ballDeltaX = -ballDeltaX;
     }
-    if (y + dy < ballRadius) {
-        dy = -dy;
-    } else if (y + dy > canvas.height - ballRadius) {
-        if (x > paddleX && x < paddleX + paddleWidth) {
-            dy = -dy;
+    if (ballY + ballDeltaY < ballRadius) {
+        ballDeltaY = -ballDeltaY;
+    } else if (ballY + ballDeltaY > canvas.height - ballRadius) {
+        if (ballX > paddleX && ballX < paddleX + paddleWidth) {
+            ballDeltaY = -ballDeltaY;
         } else {
+            clearTimeout(timeout);
             alert("GAME OVER");
-            clearInterval(interval);
             document.location.reload();
+            return;
         }
     }
     if (rightPressed) {
@@ -52,7 +51,9 @@ function draw() {
             paddleX = 0;
         }
     }
-    x += dx;
-    y += dy;
+    ballX += ballDeltaX;
+    ballY += ballDeltaY;
+    timeout = setTimeout(draw, 10);
 }
-const interval = setInterval(draw, 10);
+let timeout = null;
+draw();

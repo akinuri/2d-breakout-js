@@ -18,7 +18,7 @@ function keyUpHandler(e) {
 
 function drawBall() {
     ctx.beginPath();
-    ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
+    ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
     ctx.fillStyle = "hsl(200, 100%, 45%)";
     ctx.fill();
     ctx.closePath();
