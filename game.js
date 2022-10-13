@@ -33,7 +33,7 @@ let bricks = [];
 for (let columnIndex = 0; columnIndex < brickColumnCount; columnIndex++) {
     bricks[columnIndex] = [];
     for (let rowIndex = 0; rowIndex < brickRowCount; rowIndex++) {
-        bricks[columnIndex][rowIndex] = { x: 0, y: 0 };
+        bricks[columnIndex][rowIndex] = { x: 0, y: 0, intact: true };
     }
 }
 
@@ -42,6 +42,7 @@ function draw() {
     drawBricks();
     drawBall();
     drawPaddle();
+    collisionDetection();
     if (ballX + ballDeltaX > canvas.width-ballRadius || ballX + ballDeltaX < ballRadius) {
         ballDeltaX = -ballDeltaX;
     }

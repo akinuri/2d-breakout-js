@@ -19,15 +19,17 @@ function keyUpHandler(e) {
 function drawBricks() {
     for (let columnIndex = 0; columnIndex < brickColumnCount; columnIndex++) {
         for (let rowIndex = 0; rowIndex < brickRowCount; rowIndex++) {
-            let brickX = (columnIndex * (brickWidth + brickPadding)) + brickOffsetLeft;
-            let brickY = (rowIndex * (brickHeight + brickPadding)) + brickOffsetTop;
-            bricks[columnIndex][rowIndex].x = brickX;
-            bricks[columnIndex][rowIndex].y = brickY;
-            ctx.beginPath();
-            ctx.rect(brickX, brickY, brickWidth, brickHeight);
-            ctx.fillStyle = "hsl(0, 60%, 50%)";
-            ctx.fill();
-            ctx.closePath();
+            if (bricks[columnIndex][rowIndex].intact) {
+                let brickX = (columnIndex * (brickWidth + brickPadding)) + brickOffsetLeft;
+                let brickY = (rowIndex * (brickHeight + brickPadding)) + brickOffsetTop;
+                bricks[columnIndex][rowIndex].x = brickX;
+                bricks[columnIndex][rowIndex].y = brickY;
+                ctx.beginPath();
+                ctx.rect(brickX, brickY, brickWidth, brickHeight);
+                ctx.fillStyle = "hsl(0, 60%, 50%)";
+                ctx.fill();
+                ctx.closePath();
+            }
         }
     }
 }
@@ -46,4 +48,23 @@ function drawPaddle() {
     ctx.fillStyle = "hsl(210, 60%, 50%)";
     ctx.fill();
     ctx.closePath();
+}
+
+function collisionDetection() {
+    for (let columnIndex = 0; columnIndex < brickColumnCount; columnIndex++) {
+        for (let rowIndex = 0; rowIndex < brickRowCount; rowIndex++) {
+            const brick = bricks[columnIndex][rowIndex];
+            if (brick.intact) {
+                if (
+                    ballX > brick.x &&
+                    ballX < brick.x + brickWidth &&
+                    ballY > brick.y &&
+                    ballY < brick.y + brickHeight
+                ) {
+                    ballDeltaY *= -1;
+                    brick.intact = false;
+                }
+            }
+        }
+    }
 }
