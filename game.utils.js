@@ -150,7 +150,7 @@ function drawPauseScreen() {
     ctx.restore();
 }
 
-function drawGameOverScreen(text) {
+function drawGameOverScreen(text1) {
     ctx.save();
     ctx.beginPath();
     ctx.rect(0, 0, canvas.width, canvas.height);
@@ -158,12 +158,21 @@ function drawGameOverScreen(text) {
     ctx.fill();
     ctx.closePath();
     ctx.font = "32px Arial";
-    ctx.fillStyle = "white";
-    let textMeasure = ctx.measureText(text);
-    ctx.strokeStyle = "hsl(0, 0%, 0%, 0.5)";
-    ctx.lineWidth = 2;
-    ctx.strokeText(text, (canvas.width - textMeasure.width) / 2, canvas.height / 2);
-    ctx.fillText(text, (canvas.width - textMeasure.width) / 2, canvas.height / 2);
+    ctx.fillStyle = "hsl(0, 0%, 100%)";
+    let textOffset = 24;
+    let text1_measure = ctx.measureText(text1);
+    let text1_x = (canvas.width - text1_measure.width) / 2;
+    let text1_y = canvas.height / 2;
+    ctx.strokeText(text1, text1_x, text1_y - textOffset);
+    ctx.fillText(text1, text1_x, text1_y - textOffset);
+    ctx.font = "24px Arial";
+    let text2 = "Press space key to play again";
+    let text2_measure = ctx.measureText(text2);
+    let text2_x = (canvas.width - text2_measure.width) / 2;
+    let text2_y = canvas.height / 2;
+    ctx.fillStyle = "hsl(0, 0%, 90%)";
+    ctx.strokeText(text2, text2_x, text2_y + textOffset);
+    ctx.fillText(text2, text2_x, text2_y + textOffset);
     ctx.restore();
 }
 
