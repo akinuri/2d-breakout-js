@@ -24,6 +24,7 @@ function mouseMoveHandler(e) {
 }
 
 function drawBricks() {
+    ctx.save();
     for (let columnIndex = 0; columnIndex < brickColumnCount; columnIndex++) {
         for (let rowIndex = 0; rowIndex < brickRowCount; rowIndex++) {
             if (bricks[columnIndex][rowIndex].intact) {
@@ -39,22 +40,27 @@ function drawBricks() {
             }
         }
     }
+    ctx.restore();
 }
 
 function drawBall() {
+    ctx.save();
     ctx.beginPath();
     ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
     ctx.fillStyle = "hsl(120, 60%, 50%)";
     ctx.fill();
     ctx.closePath();
+    ctx.restore();
 }
 
 function drawPaddle() {
+    ctx.save();
     ctx.beginPath();
     ctx.rect(paddleX, canvas.height - paddleHeight - paddleMargin, paddleWidth, paddleHeight);
     ctx.fillStyle = "hsl(210, 60%, 50%)";
     ctx.fill();
     ctx.closePath();
+    ctx.restore();
 }
 
 function collisionDetection() {
@@ -85,17 +91,39 @@ function collisionDetection() {
 }
 
 function drawScore() {
+    ctx.save();
     ctx.font = "16px Arial";
     ctx.fillStyle = "black";
     ctx.fillText(`Score: ${score}`, 8, 22);
+    ctx.restore();
 }
 
 function drawLives() {
+    ctx.save();
     ctx.font = "16px Arial";
     ctx.fillStyle = "black";
     ctx.fillText(`Lives: ${lives}`, canvas.width - 65, 22);
+    ctx.restore();
 }
 
 function getPixelInTime(pixelsPerSecond, elapsedFrameTime) {
     return elapsedFrameTime / 1000 * pixelsPerSecond;
+}
+
+function drawStartScreen() {
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "hsl(0, 0%, 0%, 0.5)";
+    ctx.fill();
+    ctx.closePath();
+    ctx.font = "32px Arial";
+    ctx.fillStyle = "white";
+    let text = "Press space key to start";
+    let textMeasure = ctx.measureText(text);
+    ctx.strokeStyle = "hsl(0, 0%, 0%, 0.5)";
+    ctx.lineWidth = 2;
+    ctx.strokeText(text, (canvas.width - textMeasure.width) / 2, canvas.height / 2);
+    ctx.fillText(text, (canvas.width - textMeasure.width) / 2, canvas.height / 2);
+    ctx.restore();
 }

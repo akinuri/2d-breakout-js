@@ -1,4 +1,3 @@
-
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -20,7 +19,7 @@ let leftPressed = false;
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
-document.addEventListener("mousemove", mouseMoveHandler, false);
+canvas.addEventListener("mousemove", mouseMoveHandler, false);
 
 let brickRowCount = 3;
 let brickColumnCount = 5;
@@ -38,6 +37,8 @@ for (let columnIndex = 0; columnIndex < brickColumnCount; columnIndex++) {
     }
 }
 
+let gameState = "idle"; // idle|running|paused ?
+
 let score = 0;
 let lives = 3;
 
@@ -48,12 +49,16 @@ function draw(force=false) {
     let elapsedFrameTime = currentFrameTime - lastFrameTime;
     if (force || elapsedFrameTime > fpsInterval ) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawScore();
+        drawLives();
         drawBricks();
         drawBall();
         drawPaddle();
+        if (gameState == "idle") {
+            drawStartScreen();
+            return;
+        }
         collisionDetection();
-        drawScore();
-        drawLives();
         if (ballX + ballRadius > canvas.width - ballRadius || ballX - ballRadius < 0) {
             ballDeltaX *= -1;
         }
@@ -100,3 +105,13 @@ function draw(force=false) {
 }
 let raf = null;
 draw(true);
+
+window.addEventListener("keypress", (e) => {
+    if (e.code == "Space") {
+        if (gameState == "idle") {
+            gameState = "running";
+            lastFrameTime = Date.now();
+            draw();
+        }
+    }
+});
