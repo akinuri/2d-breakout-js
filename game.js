@@ -58,6 +58,10 @@ function draw(force=false) {
             drawStartScreen();
             return;
         }
+        if (gameState == "paused") {
+            drawPauseScreen();
+            return;
+        }
         collisionDetection();
         if (ballX + ballRadius > canvas.width - ballRadius || ballX - ballRadius < 0) {
             ballDeltaX *= -1;
@@ -109,6 +113,14 @@ draw(true);
 window.addEventListener("keypress", (e) => {
     if (e.code == "Space") {
         if (gameState == "idle") {
+            gameState = "running";
+            lastFrameTime = Date.now();
+            draw();
+        }
+        else if (gameState == "running") {
+            gameState = "paused";
+        }
+        else if (gameState == "paused") {
             gameState = "running";
             lastFrameTime = Date.now();
             draw();

@@ -127,3 +127,21 @@ function drawStartScreen() {
     ctx.fillText(text, (canvas.width - textMeasure.width) / 2, canvas.height / 2);
     ctx.restore();
 }
+
+function drawPauseScreen() {
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "hsl(0, 0%, 0%, 0.5)";
+    ctx.fill();
+    ctx.closePath();
+    ctx.font = "32px Arial";
+    ctx.fillStyle = "white";
+    let text = "Press space key to continue";
+    let textMeasure = ctx.measureText(text);
+    ctx.strokeStyle = "hsl(0, 0%, 0%, 0.5)";
+    ctx.lineWidth = 2;
+    ctx.strokeText(text, (canvas.width - textMeasure.width) / 2, canvas.height / 2);
+    ctx.fillText(text, (canvas.width - textMeasure.width) / 2, canvas.height / 2);
+    ctx.restore();
+}
