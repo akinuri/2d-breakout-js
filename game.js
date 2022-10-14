@@ -37,10 +37,10 @@ for (let columnIndex = 0; columnIndex < brickColumnCount; columnIndex++) {
     }
 }
 
-let gameState = "idle"; // idle|running|paused ?
-
 let score = 0;
 let lives = 3;
+
+let gameState = "idle"; // idle|running|paused|over ?
 
 let fps = 60, lastFrameTime = Date.now(), fpsInterval = 1000 / fps;
 
@@ -63,6 +63,11 @@ function draw(force=false) {
             return;
         }
         collisionDetection();
+        if (score === brickRowCount * brickColumnCount) {
+            drawGameOverScreen("You win! :)");
+            gameState = "over";
+            return;
+        }
         if (ballX + ballRadius > canvas.width - ballRadius || ballX - ballRadius < 0) {
             ballDeltaX *= -1;
         }
@@ -75,9 +80,8 @@ function draw(force=false) {
             } else {
                 lives--;
                 if (!lives) {
-                    cancelAnimationFrame(raf);
-                    alert("GAME OVER");
-                    document.location.reload();
+                    drawGameOverScreen("You lose :(");
+                    gameState = "over";
                     return;
                 }
                 else {
@@ -122,6 +126,11 @@ window.addEventListener("keypress", (e) => {
         }
         else if (gameState == "paused") {
             gameState = "running";
+            lastFrameTime = Date.now();
+            draw();
+        }
+        else if (gameState == "over") {
+            resetGame("running");
             lastFrameTime = Date.now();
             draw();
         }
