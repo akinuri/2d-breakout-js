@@ -17,10 +17,10 @@ function keyUpHandler(e) {
 }
 
 function mouseMoveHandler(e) {
-    const relativeX = e.clientX - canvas.offsetLeft;
-    if (relativeX > 0 && relativeX < canvas.width) {
-        paddleX = relativeX - paddleWidth / 2;
-    }
+    const relativeX = e.offsetX;
+    paddle.x = relativeX - paddle.width / 2;
+    paddle.x = Math.max(paddle.x, 0);
+    paddle.x = Math.min(paddle.x, canvas.width - paddle.width);
 }
 
 function drawBricks() {
