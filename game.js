@@ -17,8 +17,7 @@ let ball = new Ball(
     (10 * 10) * -1,
 );
 
-let rightPressed = false;
-let leftPressed = false;
+let paddleDirKeyPresses = [];
 
 document.addEventListener("keydown", keyDownHandler, false);
 document.addEventListener("keyup", keyUpHandler, false);
@@ -97,18 +96,16 @@ function draw(force=false) {
                 }
             }
         }
-        if (rightPressed) {
-            paddle.dir = 1;
-        } else if (leftPressed) {
-            paddle.dir = -1;
-        } else {
-            paddle.dir = 0;
+        paddle.dir = 0;
+        switch (paddleDirKeyPresses[0] ?? null) {
+            case "right": paddle.dir = 1; break;
+            case "left": paddle.dir = -1; break;
         }
         paddle.move(elapsedFrameTime);
-        if (paddle.x < 0){
+        if (paddle.x < 0) {
             paddle.x = 0;
         }
-        if (paddle.x + paddle.width > canvas.width){
+        if (paddle.x + paddle.width > canvas.width) {
             paddle.x = canvas.width - paddle.width;
         }
         ball.move(elapsedFrameTime);

@@ -1,18 +1,60 @@
 function keyDownHandler(e) {
+    let targetKeys = ["Right", "ArrowRight", "Left", "ArrowLeft"];
+    if (!targetKeys.includes(e.key)) {
+        return;
+    }
+    let dir = null;
     if (e.key == "Right" || e.key == "ArrowRight") {
-        rightPressed = true;
+        if (
+            paddleDirKeyPresses.length == 0
+            || paddleDirKeyPresses[0] != "right"
+        ) {
+            dir = "right";
+        }
     }
     else if (e.key == "Left" || e.key == "ArrowLeft") {
-        leftPressed = true;
+        if (
+            paddleDirKeyPresses.length == 0
+            || paddleDirKeyPresses[0] != "left"
+        ) {
+            dir = "left";
+        }
+    }
+    if (dir) {
+        paddleDirKeyPresses.unshift(dir);
+        if (paddleDirKeyPresses.length > 2) {
+            paddleDirKeyPresses = paddleDirKeyPresses.slice(0, 2);
+        }
     }
 }
 
 function keyUpHandler(e) {
+    let targetKeys = ["Right", "ArrowRight", "Left", "ArrowLeft"];
+    if (!targetKeys.includes(e.key)) {
+        return;
+    }
+    let dir = null;
     if (e.key == "Right" || e.key == "ArrowRight") {
-        rightPressed = false;
+        if (
+            (paddleDirKeyPresses.length == 1 && paddleDirKeyPresses[0] == "right")
+            || (paddleDirKeyPresses.length == 2 && paddleDirKeyPresses.includes("right"))
+        ) {
+            dir = "right";
+        }
     }
     else if (e.key == "Left" || e.key == "ArrowLeft") {
-        leftPressed = false;
+        if (
+            (paddleDirKeyPresses.length == 1 && paddleDirKeyPresses[0] == "left")
+            || (paddleDirKeyPresses.length == 2 && paddleDirKeyPresses.includes("left"))
+        ) {
+            dir = "left";
+        }
+    }
+    if (dir) {
+        let dirIndex = paddleDirKeyPresses.indexOf(dir);
+        if (dirIndex !== -1) {
+            paddleDirKeyPresses.splice(paddleDirKeyPresses.indexOf(dir), 1);
+        }
     }
 }
 
