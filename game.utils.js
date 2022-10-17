@@ -146,6 +146,7 @@ function resetGame(state) {
         (10 * 10) * -1,
     );
     paddle.x = (canvas.width - paddle.width) / 2;
+    paddle.dir = 0;
     score = 0;
     lives = 3;
     gameState = state || "idle";

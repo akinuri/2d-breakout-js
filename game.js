@@ -6,7 +6,7 @@ let paddle = new Paddle(
     10,
     (canvas.width - 70) / 2,
     10,
-    4,
+    (10 * 10 * 3),
 );
 
 let ball = new Ball(
@@ -93,20 +93,23 @@ function draw(force=false) {
                         (10 * 10) * -1,
                     );
                     paddle.x = (canvas.width - paddle.width) / 2;
+                    paddle.dir = 0;
                 }
             }
         }
         if (rightPressed) {
-            paddle.x += paddle.speed;
-            if (paddle.x + paddle.width > canvas.width){
-                paddle.x = canvas.width - paddle.width;
-            }
+            paddle.dir = 1;
+        } else if (leftPressed) {
+            paddle.dir = -1;
+        } else {
+            paddle.dir = 0;
         }
-        else if (leftPressed) {
-            paddle.x -= paddle.speed;
-            if (paddle.x < 0){
-                paddle.x = 0;
-            }
+        paddle.move(elapsedFrameTime);
+        if (paddle.x < 0){
+            paddle.x = 0;
+        }
+        if (paddle.x + paddle.width > canvas.width){
+            paddle.x = canvas.width - paddle.width;
         }
         ball.move(elapsedFrameTime);
         lastFrameTime = currentFrameTime - (elapsedFrameTime % fpsInterval);
