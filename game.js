@@ -91,8 +91,8 @@ function draw(force=false) {
                         15,
                         canvas.width / 2,
                         canvas.height - paddle.height - paddle.bottomMargin - 15,
-                        canvas.width / 2 * (Math.round(Math.random()) ? 1 : -1),
-                        canvas.width / 2 * -1,
+                        canvas.width / 3 * (Math.round(Math.random()) ? 1 : -1),
+                        canvas.width / 3 * -1,
                     );
                     paddle.x = (canvas.width - paddle.width) / 2;
                     paddle.dir = 0;
