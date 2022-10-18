@@ -63,6 +63,12 @@ function draw(force=false) {
         }
         collisionDetection();
         if (score === bricks.rowCount * bricks.columnCount) {
+            resetCanvas();
+            drawScore();
+            drawLives();
+            bricks.draw();
+            ball.draw();
+            paddle.draw();
             drawGameOverScreen("You win! :)");
             gameState = "over";
             return;
