@@ -112,7 +112,7 @@ function gameStateHandler() {
         lastFrameTime = Date.now();
         draw();
     }
-    else if (gameState == "over") {
+    else if (["over-win", "over-lose"].includes(gameState)) {
         resetGame("running");
         lastFrameTime = Date.now();
         draw();

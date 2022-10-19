@@ -39,7 +39,7 @@ let bricks = new Bricks(
 let score = 0;
 let lives = 3;
 
-let gameState = "idle"; // idle|running|paused|over ?
+let gameState = "idle"; // idle|running|paused|over-win|over-lose
 
 let fps = 60, lastFrameTime = Date.now(), fpsInterval = 1000 / fps;
 
@@ -53,16 +53,20 @@ function draw(force=false) {
         bricks.draw();
         ball.draw();
         paddle.draw();
-        if (gameState == "over") {
-            drawGameOverScreen("You win! :)");
-            return;
-        }
         if (gameState == "idle") {
             drawStartScreen();
             return;
         }
         if (gameState == "paused") {
             drawPauseScreen();
+            return;
+        }
+        if (gameState == "over-win") {
+            drawGameOverScreen("You win! :)");
+            return;
+        }
+        if (gameState == "over-lose") {
+            drawGameOverScreen("You lose :(");
             return;
         }
         let touchedBrick = CollisionMonitor.doesBallTouchAnyBrick(
@@ -76,7 +80,7 @@ function draw(force=false) {
             score++;
         }
         if (score === bricks.rowCount * bricks.columnCount) {
-            gameState = "over";
+            gameState = "over-win";
             draw(true);
             return;
         }
@@ -92,11 +96,10 @@ function draw(force=false) {
         else if (CollisionMonitor.doesBallTouchBottomWall(ball, canvas)) {
             lives--;
             if (lives == 0) {
-                drawGameOverScreen("You lose :(");
-                gameState = "over";
+                gameState = "over-lose";
+                draw(true);
                 return;
-            }
-            else {
+            } else {
                 resetBallAndPaddle();
             }
         }
