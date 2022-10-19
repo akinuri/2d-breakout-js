@@ -53,6 +53,10 @@ function draw(force=false) {
         bricks.draw();
         ball.draw();
         paddle.draw();
+        if (gameState == "over") {
+            drawGameOverScreen("You win! :)");
+            return;
+        }
         if (gameState == "idle") {
             drawStartScreen();
             return;
@@ -72,14 +76,8 @@ function draw(force=false) {
             score++;
         }
         if (score === bricks.rowCount * bricks.columnCount) {
-            resetCanvas();
-            drawScore();
-            drawLives();
-            bricks.draw();
-            ball.draw();
-            paddle.draw();
-            drawGameOverScreen("You win! :)");
             gameState = "over";
+            draw(true);
             return;
         }
         if (CollisionMonitor.doesBallTouchVerticalWalls(ball, canvas)) {
