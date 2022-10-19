@@ -61,7 +61,16 @@ function draw(force=false) {
             drawPauseScreen();
             return;
         }
-        collisionDetection();
+        let touchedBrick = CollisionMonitor.doesBallTouchAnyBrick(
+            ball,
+            bricks,
+            (brick) => brick.isIntact,
+        );
+        if (touchedBrick) {
+            touchedBrick.isIntact = false;
+            ball.ySpeed *= -1;
+            score++;
+        }
         if (score === bricks.rowCount * bricks.columnCount) {
             resetCanvas();
             drawScore();
@@ -73,36 +82,32 @@ function draw(force=false) {
             gameState = "over";
             return;
         }
-        if (
-            ball.x + ball.radius > canvas.width - ball.radius
-            || ball.x - ball.radius < 0
-        ) {
+        if (CollisionMonitor.doesBallTouchVerticalWalls(ball, canvas)) {
             ball.xSpeed *= -1;
         }
-        if (ball.y - ball.radius < 0) {
+        if (
+            CollisionMonitor.doesBallTouchTopWall(ball, canvas)
+            || CollisionMonitor.doesBallTouchPaddle(ball, paddle)
+        ) {
             ball.ySpeed *= -1;
         }
-        else if (ball.y + ball.radius > canvas.height - ball.radius) {
-            if (ball.x > paddle.x && ball.x < paddle.x + paddle.width) {
-                ball.ySpeed *= -1;
-            } else {
-                lives--;
-                if (!lives) {
-                    drawGameOverScreen("You lose :(");
-                    gameState = "over";
-                    return;
-                }
-                else {
-                    ball.init(
-                        15,
-                        canvas.width / 2,
-                        canvas.height - paddle.height - paddle.bottomMargin - 15,
-                        canvas.width / 3 * (Math.round(Math.random()) ? 1 : -1),
-                        canvas.width / 3 * -1,
-                    );
-                    paddle.x = (canvas.width - paddle.width) / 2;
-                    paddle.dir = 0;
-                }
+        else if (CollisionMonitor.doesBallTouchBottomWall(ball, canvas)) {
+            lives--;
+            if (lives == 0) {
+                drawGameOverScreen("You lose :(");
+                gameState = "over";
+                return;
+            }
+            else {
+                ball.init(
+                    15,
+                    canvas.width / 2,
+                    canvas.height - paddle.height - paddle.bottomMargin - 15,
+                    canvas.width / 3 * (Math.round(Math.random()) ? 1 : -1),
+                    canvas.width / 3 * -1,
+                );
+                paddle.x = (canvas.width - paddle.width) / 2;
+                paddle.dir = 0;
             }
         }
         paddle.dir = 0;
@@ -111,10 +116,10 @@ function draw(force=false) {
             case "left": paddle.dir = -1; break;
         }
         paddle.move(elapsedFrameTime);
-        if (paddle.x < 0) {
+        if (CollisionMonitor.doesPaddleTouchLeftWall(paddle, canvas)) {
             paddle.x = 0;
         }
-        if (paddle.x + paddle.width > canvas.width) {
+        else if (CollisionMonitor.doesPaddleTouchRightWall(paddle, canvas)) {
             paddle.x = canvas.width - paddle.width;
         }
         ball.move(elapsedFrameTime);

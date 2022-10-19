@@ -65,26 +65,6 @@ function mouseMoveHandler(e) {
     paddle.x = Math.min(paddle.x, canvas.width - paddle.width);
 }
 
-function collisionDetection() {
-    for (let colIndex = 0; colIndex < bricks.columnCount; colIndex++) {
-        for (let rowIndex = 0; rowIndex < bricks.rowCount; rowIndex++) {
-            const brick = bricks.bricks[colIndex][rowIndex];
-            if (brick.isIntact) {
-                if (
-                    ball.x > brick.x &&
-                    ball.x < brick.x + brick.width &&
-                    ball.y > brick.y &&
-                    ball.y < brick.y + brick.height
-                ) {
-                    ball.ySpeed *= -1;
-                    brick.isIntact = false;
-                    score++;
-                }
-            }
-        }
-    }
-}
-
 function getPixelInTime(pixelsPerSecond, elapsedFrameTime) {
     return elapsedFrameTime / 1000 * pixelsPerSecond;
 }
