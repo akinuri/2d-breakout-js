@@ -102,7 +102,7 @@ function draw(force=false) {
                 ball.init(
                     15,
                     canvas.width / 2,
-                    canvas.height - paddle.height - paddle.bottomMargin - 15,
+                    paddle.y - 15,
                     canvas.width / 3 * (Math.round(Math.random()) ? 1 : -1),
                     canvas.width / 3 * -1,
                 );
