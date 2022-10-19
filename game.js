@@ -97,15 +97,7 @@ function draw(force=false) {
                 return;
             }
             else {
-                ball.init(
-                    15,
-                    canvas.width / 2,
-                    paddle.y - 15,
-                    canvas.width / 3 * (Math.round(Math.random()) ? 1 : -1),
-                    canvas.width / 3 * -1,
-                );
-                paddle.x = (canvas.width - paddle.width) / 2;
-                paddle.dir = 0;
+                resetBallAndPaddle();
             }
         }
         paddle.dir = 0;

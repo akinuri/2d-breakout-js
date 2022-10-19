@@ -69,17 +69,21 @@ function getPixelInTime(pixelsPerSecond, elapsedFrameTime) {
     return elapsedFrameTime / 1000 * pixelsPerSecond;
 }
 
-function resetGame(state) {
-    bricks.build();
+function resetBallAndPaddle() {
     ball.init(
         15,
         canvas.width / 2,
-        canvas.height - paddle.height - paddle.bottomMargin - 15,
-        canvas.width / 2 * (Math.round(Math.random()) ? 1 : -1),
-        canvas.width / 2 * -1,
+        paddle.y - 15,
+        canvas.width / 3 * (Math.round(Math.random()) ? 1 : -1),
+        canvas.width / 3 * -1,
     );
     paddle.x = (canvas.width - paddle.width) / 2;
     paddle.dir = 0;
+}
+
+function resetGame(state) {
+    bricks.build();
+    resetBallAndPaddle();
     score = 0;
     lives = 3;
     gameState = state || "idle";
