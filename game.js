@@ -8,14 +8,14 @@ let paddle = new Paddle(
     100,
     15,
     (canvas.width - 100) / 2,
-    15,
+    canvas.height - 15 - 15,
     canvas.width,
 );
 
 let ball = new Ball(
     15,
     canvas.width / 2,
-    canvas.height - paddle.height - paddle.bottomMargin - 15,
+    paddle.y - 15,
     canvas.width / 3 * (Math.round(Math.random()) ? 1 : -1),
     canvas.width / 3 * -1,
 );
