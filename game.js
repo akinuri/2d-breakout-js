@@ -109,12 +109,7 @@ function draw(force=false) {
             case "left": paddle.dir = -1; break;
         }
         paddle.move(elapsedFrameTime);
-        if (CollisionMonitor.doesPaddleTouchLeftWall(paddle, canvas)) {
-            paddle.x = 0;
-        }
-        else if (CollisionMonitor.doesPaddleTouchRightWall(paddle, canvas)) {
-            paddle.x = canvas.width - paddle.width;
-        }
+        CollisionMonitor.constrainPaddleMovementToCanvas(paddle, canvas);
         ball.move(elapsedFrameTime);
         lastFrameTime = currentFrameTime - (elapsedFrameTime % fpsInterval);
     }

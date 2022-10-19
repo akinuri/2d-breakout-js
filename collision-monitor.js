@@ -7,11 +7,11 @@ let CollisionMonitor = {
     },
     
     doesBallTouchTopWall : function (ball, canvas) {
-        return ball.y - ball.radius < 0;
+        return ball.y - ball.radius <= 0;
     },
     
     doesBallTouchBottomWall : function (ball, canvas) {
-        return ball.y > canvas.height - ball.radius;
+        return ball.y >= canvas.height - ball.radius;
     },
     
     doesBallTouchPaddle : function (ball, paddle) {
@@ -45,13 +45,22 @@ let CollisionMonitor = {
                 }
                 if (
                     isBrickValid
-                    && CollisionMonitor.doesBallTouchBrick(ball, brick)
+                    && this.doesBallTouchBrick(ball, brick)
                 ) {
                     return brick;
                 }
             }
         }
         return null;
+    },
+    
+    constrainPaddleMovementToCanvas : function (paddle, canvas) {
+        if (this.doesPaddleTouchLeftWall(paddle, canvas)) {
+            paddle.x = 0;
+        }
+        else if (this.doesPaddleTouchRightWall(paddle, canvas)) {
+            paddle.x = canvas.width - paddle.width;
+        }
     },
     
 };
