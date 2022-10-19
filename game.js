@@ -132,23 +132,12 @@ draw(true);
 
 window.addEventListener("keypress", (e) => {
     if (e.code == "Space") {
-        if (gameState == "idle") {
-            gameState = "running";
-            lastFrameTime = Date.now();
-            draw();
-        }
-        else if (gameState == "running") {
-            gameState = "paused";
-        }
-        else if (gameState == "paused") {
-            gameState = "running";
-            lastFrameTime = Date.now();
-            draw();
-        }
-        else if (gameState == "over") {
-            resetGame("running");
-            lastFrameTime = Date.now();
-            draw();
-        }
+        gameStateHandler();
+    }
+});
+
+window.addEventListener("auxclick", (e) => {
+    if (e.button == 1) {
+        gameStateHandler();
     }
 });

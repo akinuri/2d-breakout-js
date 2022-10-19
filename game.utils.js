@@ -93,3 +93,24 @@ function resetCanvas() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.restore();
 }
+
+function gameStateHandler() {
+    if (gameState == "idle") {
+        gameState = "running";
+        lastFrameTime = Date.now();
+        draw();
+    }
+    else if (gameState == "running") {
+        gameState = "paused";
+    }
+    else if (gameState == "paused") {
+        gameState = "running";
+        lastFrameTime = Date.now();
+        draw();
+    }
+    else if (gameState == "over") {
+        resetGame("running");
+        lastFrameTime = Date.now();
+        draw();
+    }
+}
