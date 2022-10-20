@@ -1,6 +1,5 @@
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
-
 canvas.width = 640;
 canvas.height = 480;
 
@@ -20,12 +19,6 @@ let ball = new Ball(
     canvas.width / 3 * -1,
 );
 
-let paddleDirKeyPresses = [];
-
-document.addEventListener("keydown", keyDownHandler, false);
-document.addEventListener("keyup", keyUpHandler, false);
-canvas.addEventListener("mousemove", mouseMoveHandler, false);
-
 let bricks = new Bricks(
     3,
     6,
@@ -38,8 +31,22 @@ let bricks = new Bricks(
 
 let score = 0;
 let lives = 3;
-
 let gameState = "idle"; // idle|running|paused|over-win|over-lose
+
+let paddleDirKeyPresses = [];
+document.addEventListener("keydown", paddleKeyDownHandler, false);
+document.addEventListener("keyup", paddleKUpHandler, false);
+canvas.addEventListener("mousemove", paddleMouseMoveHandler, false);
+window.addEventListener("keypress", (e) => {
+    if (e.code == "Space") {
+        gameStateHandler();
+    }
+});
+window.addEventListener("auxclick", (e) => {
+    if (e.button == 1) {
+        gameStateHandler();
+    }
+});
 
 let app = new App(60, function draw(elapsedFrameTime) {
     resetCanvas();
@@ -106,18 +113,6 @@ let app = new App(60, function draw(elapsedFrameTime) {
     paddle.move(elapsedFrameTime);
     CollisionMonitor.constrainPaddleMovementToCanvas(paddle, canvas);
     ball.move(elapsedFrameTime);
-});
-
-window.addEventListener("keypress", (e) => {
-    if (e.code == "Space") {
-        gameStateHandler();
-    }
-});
-
-window.addEventListener("auxclick", (e) => {
-    if (e.button == 1) {
-        gameStateHandler();
-    }
 });
 
 app.main(true);

@@ -1,4 +1,4 @@
-function keyDownHandler(e) {
+function paddleKeyDownHandler(e) {
     let targetKeys = ["Right", "ArrowRight", "Left", "ArrowLeft"];
     if (!targetKeys.includes(e.key)) {
         return;
@@ -28,7 +28,7 @@ function keyDownHandler(e) {
     }
 }
 
-function keyUpHandler(e) {
+function paddleKUpHandler(e) {
     let targetKeys = ["Right", "ArrowRight", "Left", "ArrowLeft"];
     if (!targetKeys.includes(e.key)) {
         return;
@@ -58,7 +58,7 @@ function keyUpHandler(e) {
     }
 }
 
-function mouseMoveHandler(e) {
+function paddleMouseMoveHandler(e) {
     const relativeX = e.offsetX;
     paddle.x = relativeX - paddle.width / 2;
     paddle.x = Math.max(paddle.x, 0);
