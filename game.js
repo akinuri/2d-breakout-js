@@ -41,82 +41,94 @@ let lives = 3;
 
 let gameState = "idle"; // idle|running|paused|over-win|over-lose
 
-let fps = 60, lastFrameTime = Date.now(), fpsInterval = 1000 / fps;
-
-function draw(force=false) {
+let fps = 60;
+let fpsInterval = 1000 / fps;
+let lastFrameTime = Date.now();
+let mainHandle = null;
+function main(callback, ignoreTime=false) {
     let currentFrameTime = Date.now();
     let elapsedFrameTime = currentFrameTime - lastFrameTime;
-    if (force || elapsedFrameTime > fpsInterval ) {
-        resetCanvas();
-        drawScore();
-        drawLives();
-        bricks.draw();
-        ball.draw();
-        paddle.draw();
-        if (gameState == "idle") {
-            drawStartScreen();
-            return;
-        }
-        if (gameState == "paused") {
-            drawPauseScreen();
-            return;
-        }
-        if (gameState == "over-win") {
-            drawGameOverScreen("You win! :)");
-            return;
-        }
-        if (gameState == "over-lose") {
-            drawGameOverScreen("You lose :(");
-            return;
-        }
-        let touchedBrick = CollisionMonitor.doesBallTouchAnyBrick(
-            ball,
-            bricks,
-            (brick) => brick.isIntact,
-        );
-        if (touchedBrick) {
-            touchedBrick.isIntact = false;
-            ball.ySpeed *= -1;
-            score++;
-        }
-        if (score === bricks.rowCount * bricks.columnCount) {
-            gameState = "over-win";
-            draw(true);
-            return;
-        }
-        if (CollisionMonitor.doesBallTouchVerticalWalls(ball, canvas)) {
-            ball.xSpeed *= -1;
-        }
-        if (
-            CollisionMonitor.doesBallTouchTopWall(ball, canvas)
-            || CollisionMonitor.doesBallTouchPaddle(ball, paddle)
-        ) {
-            ball.ySpeed *= -1;
-        }
-        else if (CollisionMonitor.doesBallTouchBottomWall(ball, canvas)) {
-            lives--;
-            if (lives == 0) {
-                gameState = "over-lose";
-                draw(true);
-                return;
-            } else {
-                resetBallAndPaddle();
+    let shouldContinue = true;
+    if (ignoreTime || elapsedFrameTime > fpsInterval) {
+        lastFrameTime = currentFrameTime - (elapsedFrameTime % fpsInterval);
+        if (callback) {
+            shouldContinue = callback(elapsedFrameTime);
+            if (shouldContinue == undefined) {
+                shouldContinue = true;
             }
         }
-        paddle.dir = 0;
-        switch (paddleDirKeyPresses[0] ?? null) {
-            case "right": paddle.dir = 1; break;
-            case "left": paddle.dir = -1; break;
-        }
-        paddle.move(elapsedFrameTime);
-        CollisionMonitor.constrainPaddleMovementToCanvas(paddle, canvas);
-        ball.move(elapsedFrameTime);
-        lastFrameTime = currentFrameTime - (elapsedFrameTime % fpsInterval);
     }
-    raf = requestAnimationFrame(draw);
+    if (shouldContinue) {
+        mainHandle = requestAnimationFrame(main.bind(null, callback));
+    }
 }
-let raf = null;
-draw(true);
+
+function draw(elapsedFrameTime) {
+    resetCanvas();
+    drawScore();
+    drawLives();
+    bricks.draw();
+    ball.draw();
+    paddle.draw();
+    if (gameState == "idle") {
+        drawStartScreen();
+        return false;
+    }
+    if (gameState == "paused") {
+        drawPauseScreen();
+        return false;
+    }
+    if (gameState == "over-win") {
+        drawGameOverScreen("You win! :)");
+        return false;
+    }
+    if (gameState == "over-lose") {
+        drawGameOverScreen("You lose :(");
+        return false;
+    }
+    let touchedBrick = CollisionMonitor.doesBallTouchAnyBrick(
+        ball,
+        bricks,
+        (brick) => brick.isIntact,
+    );
+    if (touchedBrick) {
+        touchedBrick.isIntact = false;
+        ball.ySpeed *= -1;
+        score++;
+    }
+    if (score === bricks.rowCount * bricks.columnCount) {
+        gameState = "over-win";
+        main(draw, true);
+        return false;
+    }
+    if (CollisionMonitor.doesBallTouchVerticalWalls(ball, canvas)) {
+        ball.xSpeed *= -1;
+    }
+    if (
+        CollisionMonitor.doesBallTouchTopWall(ball, canvas)
+        || CollisionMonitor.doesBallTouchPaddle(ball, paddle)
+    ) {
+        ball.ySpeed *= -1;
+    }
+    else if (CollisionMonitor.doesBallTouchBottomWall(ball, canvas)) {
+        lives--;
+        if (lives == 0) {
+            gameState = "over-lose";
+            main(draw, true);
+            return false;
+        } else {
+            resetBallAndPaddle();
+        }
+    }
+    paddle.dir = 0;
+    switch (paddleDirKeyPresses[0] ?? null) {
+        case "right": paddle.dir = 1; break;
+        case "left": paddle.dir = -1; break;
+    }
+    paddle.move(elapsedFrameTime);
+    CollisionMonitor.constrainPaddleMovementToCanvas(paddle, canvas);
+    ball.move(elapsedFrameTime);
+}
 
 window.addEventListener("keypress", (e) => {
     if (e.code == "Space") {
@@ -129,3 +141,5 @@ window.addEventListener("auxclick", (e) => {
         gameStateHandler();
     }
 });
+
+main(draw, true);

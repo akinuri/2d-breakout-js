@@ -102,7 +102,7 @@ function gameStateHandler() {
     if (gameState == "idle") {
         gameState = "running";
         lastFrameTime = Date.now();
-        draw();
+        main(draw, true);
     }
     else if (gameState == "running") {
         gameState = "paused";
@@ -110,11 +110,11 @@ function gameStateHandler() {
     else if (gameState == "paused") {
         gameState = "running";
         lastFrameTime = Date.now();
-        draw();
+        main(draw, true);
     }
     else if (["over-win", "over-lose"].includes(gameState)) {
         resetGame("running");
         lastFrameTime = Date.now();
-        draw();
+        main(draw, true);
     }
 }
