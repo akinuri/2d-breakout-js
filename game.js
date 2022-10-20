@@ -41,9 +41,7 @@ let lives = 3;
 
 let gameState = "idle"; // idle|running|paused|over-win|over-lose
 
-let app = new App(60, draw);
-
-function draw(elapsedFrameTime) {
+let app = new App(60, function draw(elapsedFrameTime) {
     resetCanvas();
     drawScore();
     drawLives();
@@ -108,7 +106,7 @@ function draw(elapsedFrameTime) {
     paddle.move(elapsedFrameTime);
     CollisionMonitor.constrainPaddleMovementToCanvas(paddle, canvas);
     ball.move(elapsedFrameTime);
-}
+});
 
 window.addEventListener("keypress", (e) => {
     if (e.code == "Space") {
