@@ -29,23 +29,21 @@ let bricks = new Bricks(
     60,
 );
 
-let score = 0;
-let lives = 3;
-let gameState = "idle"; // idle|running|paused|over-win|over-lose
+let game = {
+    score: 0,
+    lives: 3,
+    state: "idle", // idle|running|paused|over-win|over-lose
+};
 
 let paddleDirKeyPresses = [];
 document.addEventListener("keydown", paddleKeyDownHandler, false);
 document.addEventListener("keyup", paddleKUpHandler, false);
 canvas.addEventListener("mousemove", paddleMouseMoveHandler, false);
 window.addEventListener("keypress", (e) => {
-    if (e.code == "Space") {
-        gameStateHandler();
-    }
+    if (e.code == "Space") gameStateHandler();
 });
 window.addEventListener("auxclick", (e) => {
-    if (e.button == 1) {
-        gameStateHandler();
-    }
+    if (e.button == 1) gameStateHandler();
 });
 
 let app = new App(60, function draw(elapsedFrameTime) {
@@ -55,19 +53,19 @@ let app = new App(60, function draw(elapsedFrameTime) {
     bricks.draw();
     ball.draw();
     paddle.draw();
-    if (gameState == "idle") {
+    if (game.state == "idle") {
         drawStartScreen();
         return false;
     }
-    if (gameState == "paused") {
+    if (game.state == "paused") {
         drawPauseScreen();
         return false;
     }
-    if (gameState == "over-win") {
+    if (game.state == "over-win") {
         drawGameOverScreen("You win! :)");
         return false;
     }
-    if (gameState == "over-lose") {
+    if (game.state == "over-lose") {
         drawGameOverScreen("You lose :(");
         return false;
     }
@@ -79,10 +77,10 @@ let app = new App(60, function draw(elapsedFrameTime) {
     if (touchedBrick) {
         touchedBrick.isIntact = false;
         ball.ySpeed *= -1;
-        score++;
+        game.score++;
     }
-    if (score === bricks.rowCount * bricks.columnCount) {
-        gameState = "over-win";
+    if (game.score === bricks.rowCount * bricks.columnCount) {
+        game.state = "over-win";
         app.main(true);
         return false;
     }
@@ -96,9 +94,9 @@ let app = new App(60, function draw(elapsedFrameTime) {
         ball.ySpeed *= -1;
     }
     else if (CollisionMonitor.doesBallTouchBottomWall(ball, canvas)) {
-        lives--;
-        if (lives == 0) {
-            gameState = "over-lose";
+        game.lives--;
+        if (game.lives == 0) {
+            game.state = "over-lose";
             app.main(true);
             return false;
         } else {

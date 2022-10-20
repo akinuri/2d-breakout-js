@@ -84,9 +84,9 @@ function resetBallAndPaddle() {
 function resetGame(state) {
     bricks.build();
     resetBallAndPaddle();
-    score = 0;
+    game.score = 0;
     lives = 3;
-    gameState = state || "idle";
+    game.state = state || "idle";
 }
 
 function resetCanvas() {
@@ -99,20 +99,20 @@ function resetCanvas() {
 }
 
 function gameStateHandler() {
-    if (gameState == "idle") {
-        gameState = "running";
+    if (game.state == "idle") {
+        game.state = "running";
         app.lastFrameTime = Date.now();
         app.main(true);
     }
-    else if (gameState == "running") {
-        gameState = "paused";
+    else if (game.state == "running") {
+        game.state = "paused";
     }
-    else if (gameState == "paused") {
-        gameState = "running";
+    else if (game.state == "paused") {
+        game.state = "running";
         app.lastFrameTime = Date.now();
         app.main(true);
     }
-    else if (["over-win", "over-lose"].includes(gameState)) {
+    else if (["over-win", "over-lose"].includes(game.state)) {
         resetGame("running");
         app.lastFrameTime = Date.now();
         app.main(true);
