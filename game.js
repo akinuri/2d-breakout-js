@@ -41,27 +41,7 @@ let lives = 3;
 
 let gameState = "idle"; // idle|running|paused|over-win|over-lose
 
-let fps = 60;
-let fpsInterval = 1000 / fps;
-let lastFrameTime = Date.now();
-let mainHandle = null;
-function main(callback, ignoreTime=false) {
-    let currentFrameTime = Date.now();
-    let elapsedFrameTime = currentFrameTime - lastFrameTime;
-    let shouldContinue = true;
-    if (ignoreTime || elapsedFrameTime > fpsInterval) {
-        lastFrameTime = currentFrameTime - (elapsedFrameTime % fpsInterval);
-        if (callback) {
-            shouldContinue = callback(elapsedFrameTime);
-            if (shouldContinue == undefined) {
-                shouldContinue = true;
-            }
-        }
-    }
-    if (shouldContinue) {
-        mainHandle = requestAnimationFrame(main.bind(null, callback));
-    }
-}
+let app = new App(60, draw);
 
 function draw(elapsedFrameTime) {
     resetCanvas();
@@ -98,7 +78,7 @@ function draw(elapsedFrameTime) {
     }
     if (score === bricks.rowCount * bricks.columnCount) {
         gameState = "over-win";
-        main(draw, true);
+        app.main(true);
         return false;
     }
     if (CollisionMonitor.doesBallTouchVerticalWalls(ball, canvas)) {
@@ -114,7 +94,7 @@ function draw(elapsedFrameTime) {
         lives--;
         if (lives == 0) {
             gameState = "over-lose";
-            main(draw, true);
+            app.main(true);
             return false;
         } else {
             resetBallAndPaddle();
@@ -142,4 +122,4 @@ window.addEventListener("auxclick", (e) => {
     }
 });
 
-main(draw, true);
+app.main(true);
