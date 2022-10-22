@@ -50,6 +50,7 @@ window.addEventListener("auxclick", (e) => {
 
 let sounds = {
     hit: "sounds/mixkit-wood-hard-hit-2182-trimmed.wav",
+    pop: "sounds/bang-03-clean-89273.mp3",
     overLose: "sounds/mixkit-arcade-retro-game-over-213.wav",
     overWin: "sounds/mixkit-arcade-game-complete-or-approved-mission-205.wav",
 };
@@ -134,6 +135,7 @@ let app = new App(60, function draw(elapsedFrameTime) {
         playSound(sounds.hit);
     }
     else if (CollisionMonitor.doesBallTouchSpikes(ball, spikes)) {
+        playSound(sounds.pop, true);
         game.lives--;
         if (game.lives == 0) {
             game.state = "over-lose";
