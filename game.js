@@ -3,11 +3,13 @@ const ctx = canvas.getContext("2d");
 canvas.width = 640;
 canvas.height = 480;
 
+let spikes = new Spikes(0, canvas.height, 15, 30, canvas.width);
+
 let paddle = new Paddle(
     100,
     15,
     (canvas.width - 100) / 2,
-    canvas.height - 15 - 15,
+    canvas.height - spikes.height - 5 - 15,
     canvas.width,
 );
 
@@ -85,6 +87,7 @@ let app = new App(60, function draw(elapsedFrameTime) {
     bricks.draw();
     ball.draw();
     paddle.draw();
+    spikes.draw();
     if (game.state == "idle") {
         drawStartScreen();
         return false;
@@ -130,7 +133,7 @@ let app = new App(60, function draw(elapsedFrameTime) {
         ball.ySpeed *= -1;
         playSound(sounds.hit);
     }
-    else if (CollisionMonitor.doesBallTouchBottomWall(ball, canvas)) {
+    else if (CollisionMonitor.doesBallTouchSpikes(ball, spikes)) {
         game.lives--;
         if (game.lives == 0) {
             game.state = "over-lose";
