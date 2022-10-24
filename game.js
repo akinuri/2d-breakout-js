@@ -36,7 +36,8 @@ let game = {
     lives: 3,
     state: "idle", // idle|running|paused|over-win|over-lose|ball-popped
 };
-let ballPopDelay = 1000;
+let ballPopBeforeDelay = 500;
+let ballPopAfterDelay = 500;
 let ballLastPopTime = null;
 
 let paddleDirKeyPresses = [];
@@ -93,7 +94,7 @@ let app = new App(60, function draw(elapsedFrameTime) {
     spikes.draw();
     if (game.state == "ball-popped") {
         let currentFrameTime = Date.now();
-        if (currentFrameTime - ballLastPopTime >= ballPopDelay) {
+        if (currentFrameTime - ballLastPopTime >= ballPopAfterDelay) {
             game.state == "running";
         } else {
             return false;
@@ -153,13 +154,15 @@ let app = new App(60, function draw(elapsedFrameTime) {
             return false;
         } else {
             game.state = "ball-popped";
-            resetBallAndPaddle();
-            ballLastPopTime = Date.now();
-            app.main(true);
             setTimeout(() => {
-                game.state = "running";
-                app.main(true, true);
-            }, ballPopDelay);
+                resetBallAndPaddle();
+                ballLastPopTime = Date.now();
+                app.main(true);
+                setTimeout(() => {
+                    game.state = "running";
+                    app.main(true, true);
+                }, ballPopAfterDelay);
+            }, ballPopBeforeDelay);
             return false;
         }
     }
