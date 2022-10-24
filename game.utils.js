@@ -101,20 +101,17 @@ function resetCanvas() {
 function gameStateHandler() {
     if (game.state == "idle") {
         game.state = "running";
-        app.lastFrameTime = Date.now();
-        app.main(true);
+        app.main(true, true);
     }
     else if (game.state == "running") {
         game.state = "paused";
     }
     else if (game.state == "paused") {
         game.state = "running";
-        app.lastFrameTime = Date.now();
-        app.main(true);
+        app.main(true, true);
     }
     else if (["over-win", "over-lose"].includes(game.state)) {
         resetGame("running");
-        app.lastFrameTime = Date.now();
-        app.main(true);
+        app.main(true, true);
     }
 }
