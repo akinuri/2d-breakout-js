@@ -28,8 +28,20 @@
             transform-origin: top;
         }
         input {
-            width: 4em;
+            width: 5em;
             font-family: monospace;
+            padding: 0.2em;
+        }
+        input[readonly] {
+            background-color: hsl(0deg 0% 0% / 1%);
+            border: 1px solid hsl(0deg 0% 80%);
+            outline: none;
+            color: hsl(0deg 0% 0% / 50%);
+        }
+        #stats {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
         }
     </style>
 </head>
@@ -40,53 +52,105 @@
         
         <canvas id="myCanvas" width="600" height="200"></canvas>
         
-        <table>
-            <tr>
-                <td>
-                    fps
-                </td>
-                <td>
-                    &nbsp;
-                    <input type="number" id="fpsInput" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    canvas.width
-                </td>
-                <td>
-                    &nbsp;
-                    <input type="number" id="canvasWidthInput" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    wall.width
-                </td>
-                <td>
-                    &nbsp;
-                    <input type="number" id="wallWidthInput" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    ball.radius
-                </td>
-                <td>
-                    &nbsp;
-                    <input type="number" id="ballRadiusInput" /> px
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    ball.xSpeed
-                </td>
-                <td>
-                    &nbsp;
-                    <input type="number" id="ballXSpeedInput" /> px / s
-                </td>
-            </tr>
-        </table>
+        <div id="stats">
+            
+            <table>
+                <tr>
+                    <td>
+                        fps
+                    </td>
+                    <td>
+                        &nbsp;
+                        <input type="number" id="fpsInput" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        canvas.width
+                    </td>
+                    <td>
+                        &nbsp;
+                        <input type="number" id="canvasWidthInput" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        wall.width
+                    </td>
+                    <td>
+                        &nbsp;
+                        <input type="number" id="wallWidthInput" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        ball.radius
+                    </td>
+                    <td>
+                        &nbsp;
+                        <input type="number" id="ballRadiusInput" /> px
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        ball.xSpeed
+                    </td>
+                    <td>
+                        &nbsp;
+                        <input type="number" id="ballXSpeedInput" /> px / s
+                    </td>
+                </tr>
+            </table>
+            
+            <table>
+                <tr>
+                    <td>
+                        leftWall.right
+                    </td>
+                    <td>
+                        &nbsp;
+                        <input type="number" id="leftWallRightDisplay" value="0" readonly />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        rightWall.left
+                    </td>
+                    <td>
+                        &nbsp;
+                        <input type="number" id="rightWallLeftDisplay" value="0" readonly />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        ball.x
+                    </td>
+                    <td>
+                        &nbsp;
+                        <input type="number" id="ballXDisplay" value="0" readonly />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        ball.left
+                    </td>
+                    <td>
+                        &nbsp;
+                        <input type="number" id="ballLeftDisplay" value="0" readonly />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        ball.right
+                    </td>
+                    <td>
+                        &nbsp;
+                        <input type="number" id="ballRightDisplay" value="0" readonly />
+                    </td>
+                </tr>
+            </table>
+            
+        </div>
         
     </div>
     
@@ -191,9 +255,9 @@
                 ball.draw();
                 lastFrameTime = currentFrameTime - (elapsedFrameTime % fpsInterval);
             }
+            updateStats();
             requestAnimationFrame(draw);
         }
-        draw();
         
         UI: {
             document.addEventListener("DOMContentLoaded", () => {
@@ -229,8 +293,21 @@
                 wallWidthInput.value = leftWall.width;
                 ballRadiusInput.value = ball.radius;
                 ballXSpeedInput.value = ball.xSpeed;
+                
+                document.querySelector("#leftWallRightDisplay").value = leftWall.x + leftWall.width;
+                document.querySelector("#rightWallLeftDisplay").value = rightWall.x;
             });
+            let ballXDisplay = document.querySelector("#ballXDisplay");
+            let ballLeftDisplay = document.querySelector("#ballLeftDisplay");
+            let ballRightDisplay = document.querySelector("#ballRightDisplay");
+            function updateStats() {
+                ballXDisplay.value = ball.x;
+                ballLeftDisplay.value = (ball.x - ball.radius).toFixed(3);
+                ballRightDisplay.value = (ball.x + ball.radius).toFixed(3);
+            }
         }
+        
+        draw();
     </script>
 </body>
 
