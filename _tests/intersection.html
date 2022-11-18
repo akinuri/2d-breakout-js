@@ -98,35 +98,6 @@
         canvas.style.width  = canvas.width + "px";
         canvas.style.height = canvas.height + "px";
         
-        let ball = {
-            radius: 50,
-            x: canvas.width / 2,
-            y: canvas.height / 2,
-            xSpeed: 50,
-            xDir: Math.round(Math.random()) ? 1 : -1,
-            move: function (elapsedFrameTime) {
-                this.x += getPixelInTime(this.xSpeed, elapsedFrameTime) * this.xDir;
-            },
-            detectCollision: function () {
-                let leftCollision  = this.x - this.radius <= leftWall.x + leftWall.width;
-                let rightCollision = this.x + this.radius >= rightWall.x;
-                if (leftCollision || rightCollision) {
-                    this.xDir *= -1;
-                }
-            },
-            draw: function () {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = "hsl(0, 60%, 50%, 0.2)";
-                ctx.strokeStyle = "hsl(0, 60%, 50%, 0.2)";
-                ctx.fill();
-                ctx.stroke();
-            },
-        };
-        
-        function getPixelInTime(pixelsPerSecond, elapsedFrameTime) {
-            return elapsedFrameTime / 1000 * pixelsPerSecond;
-        }
         
         let leftWall = {
             width: 50,
@@ -165,6 +136,36 @@
                 ctx.stroke();
             },
         };
+        
+        let ball = {
+            radius: 50,
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            xSpeed: 50,
+            xDir: Math.round(Math.random()) ? 1 : -1,
+            draw: function () {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = "hsl(0, 60%, 50%, 0.2)";
+                ctx.strokeStyle = "hsl(0, 60%, 50%, 0.2)";
+                ctx.fill();
+                ctx.stroke();
+            },
+            move: function (elapsedFrameTime) {
+                this.x += getPixelInTime(this.xSpeed, elapsedFrameTime) * this.xDir;
+            },
+            detectCollision: function () {
+                let leftCollision  = this.x - this.radius <= leftWall.x + leftWall.width;
+                let rightCollision = this.x + this.radius >= rightWall.x;
+                if (leftCollision || rightCollision) {
+                    this.xDir *= -1;
+                }
+            },
+        };
+        
+        function getPixelInTime(pixelsPerSecond, elapsedFrameTime) {
+            return elapsedFrameTime / 1000 * pixelsPerSecond;
+        }
         
         let fps = 60;
         let lastFrameTime = Date.now();
