@@ -38,7 +38,7 @@
     
     <div class="container">
         
-        <canvas id="myCanvas" width="400" height="200"></canvas>
+        <canvas id="myCanvas" width="600" height="200"></canvas>
         
         <table>
             <tr>
@@ -98,9 +98,8 @@
         canvas.style.width  = canvas.width + "px";
         canvas.style.height = canvas.height + "px";
         
-        
         let leftWall = {
-            width: 50,
+            width: 100,
             height: canvas.height,
             x: 0,
             y: 0,
@@ -119,9 +118,9 @@
         };
         
         let rightWall = {
-            width: 50,
+            width: 100,
             height: canvas.height,
-            x: canvas.width - 50,
+            x: canvas.width - 100,
             y: 0,
             draw: function () {
                 ctx.beginPath();
@@ -138,10 +137,10 @@
         };
         
         let ball = {
-            radius: 50,
+            radius: 25,
             x: canvas.width / 2,
             y: canvas.height / 2,
-            xSpeed: 50,
+            xSpeed: 85,
             xDir: Math.round(Math.random()) ? 1 : -1,
             draw: function () {
                 ctx.beginPath();
