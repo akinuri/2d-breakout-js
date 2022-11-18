@@ -121,7 +121,6 @@
                 ctx.strokeStyle = "hsl(0, 60%, 50%, 0.2)";
                 ctx.fill();
                 ctx.stroke();
-                ctx.closePath();
             },
         };
         
@@ -139,14 +138,12 @@
                 ctx.rect(this.x, this.y, this.width, this.height);
                 ctx.fillStyle = "hsl(0, 0%, 0%, 0.05)";
                 ctx.fill();
-                ctx.closePath();
                 ctx.beginPath(this.x + this.width, this.y);
                 ctx.lineWidth = 1;
                 ctx.moveTo(this.x + this.width - 1 + 0.5, this.y);
                 ctx.lineTo(this.x + this.width - 1 + 0.5, this.y + this.height);
                 ctx.strokeStyle = "hsl(0, 0%, 0%, 0.1)";
                 ctx.stroke();
-                ctx.closePath();
             },
         };
         
@@ -160,18 +157,18 @@
                 ctx.rect(this.x, this.y, this.width, this.height);
                 ctx.fillStyle = "hsl(0, 0%, 0%, 0.05)";
                 ctx.fill();
-                ctx.closePath();
                 ctx.beginPath(this.x, this.y);
                 ctx.lineWidth = 1;
                 ctx.moveTo(this.x + 0.5, this.y);
                 ctx.lineTo(this.x + 0.5, this.y + this.height);
                 ctx.strokeStyle = "hsl(0, 0%, 0%, 0.1)";
                 ctx.stroke();
-                ctx.closePath();
             },
         };
         
-        let fps = 60, lastFrameTime = Date.now(), fpsInterval = 1000 / fps;
+        let fps = 60;
+        let lastFrameTime = Date.now();
+        let fpsInterval = 1000 / fps;
         
         function draw() {
             let currentFrameTime = Date.now();
