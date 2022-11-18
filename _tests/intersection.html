@@ -150,15 +150,21 @@
                 ctx.fill();
                 ctx.stroke();
             },
+            detectCollision: function () {
+                let result = {
+                    leftWall  : this.x - this.radius <= leftWall.x + leftWall.width,
+                    rightWall : this.x + this.radius >= rightWall.x,
+                    collides  : false,
+                };
+                result.collides = result.leftWall || result.rightWall;
+                return result;
+            },
             move: function (elapsedFrameTime) {
                 this.x += getPixelInTime(this.xSpeed, elapsedFrameTime) * this.xDir;
             },
-            detectCollision: function () {
-                let leftCollision  = this.x - this.radius <= leftWall.x + leftWall.width;
-                let rightCollision = this.x + this.radius >= rightWall.x;
-                if (leftCollision || rightCollision) {
-                    this.xDir *= -1;
-                }
+            resolveCollision: function (collision, elapsedFrameTime) {
+                // TODO: fix overshoot
+                ball.xDir *= -1;
             },
         };
         
@@ -177,8 +183,11 @@
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 leftWall.draw();
                 rightWall.draw();
-                ball.detectCollision();
                 ball.move(elapsedFrameTime);
+                let collision = ball.detectCollision();
+                if (collision.collides) {
+                    ball.resolveCollision(collision, elapsedFrameTime);
+                }
                 ball.draw();
                 lastFrameTime = currentFrameTime - (elapsedFrameTime % fpsInterval);
             }
