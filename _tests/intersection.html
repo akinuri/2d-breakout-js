@@ -4,46 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <title>Collision Intersection Issue</title>
-    <style>
-        * {
-            padding: 0;
-            margin: 0;
-        }
-        body {
-            padding: 1em;
-            display: flex;
-            justify-content: center;
-        }
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            margin: 0 auto;
-            gap: 1em;
-            font-family: sans-serif;
-        }
-        canvas {
-            background: hsl(0, 0%, 95%);
-            display: block;
-            transform-origin: top;
-        }
-        input {
-            width: 5em;
-            font-family: monospace;
-            padding: 0.2em;
-        }
-        input[readonly] {
-            background-color: hsl(0deg 0% 0% / 1%);
-            border: 1px solid hsl(0deg 0% 80%);
-            outline: none;
-            color: hsl(0deg 0% 0% / 50%);
-        }
-        #stats {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -60,7 +21,6 @@
                         fps
                     </td>
                     <td>
-                        &nbsp;
                         <input type="number" id="fpsInput" />
                     </td>
                 </tr>
@@ -69,25 +29,33 @@
                         canvas.width
                     </td>
                     <td>
-                        &nbsp;
                         <input type="number" id="canvasWidthInput" />
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        wall.width
+                        canvas.height
                     </td>
                     <td>
-                        &nbsp;
-                        <input type="number" id="wallWidthInput" />
+                        <input type="number" id="canvasHeightInput" />
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        wall thickness
+                    </td>
+                    <td>
+                        <input type="number" id="wallThicknessInput" />
+                    </td>
+                </tr>
+            </table>
+            
+            <table>
                 <tr>
                     <td>
                         ball.radius
                     </td>
                     <td>
-                        &nbsp;
                         <input type="number" id="ballRadiusInput" /> px
                     </td>
                 </tr>
@@ -96,8 +64,37 @@
                         ball.xSpeed
                     </td>
                     <td>
-                        &nbsp;
                         <input type="number" id="ballXSpeedInput" /> px / s
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        ball.ySpeed
+                    </td>
+                    <td>
+                        <input type="number" id="ballYSpeedInput" /> px / s
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        ball.xDir
+                    </td>
+                    <td>
+                        <select id="ballXDirInput">
+                            <option value="1">+1</option>
+                            <option value="-1">-1</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        ball.yDir
+                    </td>
+                    <td>
+                        <select id="ballYDirInput">
+                            <option value="1">+1</option>
+                            <option value="-1">-1</option>
+                        </select>
                     </td>
                 </tr>
             </table>
@@ -105,11 +102,10 @@
             <table>
                 <tr>
                     <td>
-                        leftWall.right
+                        topWall.bottom
                     </td>
                     <td>
-                        &nbsp;
-                        <input type="number" id="leftWallRightDisplay" value="0" readonly />
+                        <input type="number" id="topWallBottomDisplay" value="0" readonly />
                     </td>
                 </tr>
                 <tr>
@@ -117,8 +113,23 @@
                         rightWall.left
                     </td>
                     <td>
-                        &nbsp;
                         <input type="number" id="rightWallLeftDisplay" value="0" readonly />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        bottomWall.top
+                    </td>
+                    <td>
+                        <input type="number" id="bottomWallTopDisplay" value="0" readonly />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        leftWall.right
+                    </td>
+                    <td>
+                        <input type="number" id="leftWallRightDisplay" value="0" readonly />
                     </td>
                 </tr>
                 <tr>
@@ -126,17 +137,23 @@
                         ball.x
                     </td>
                     <td>
-                        &nbsp;
                         <input type="number" id="ballXDisplay" value="0" readonly />
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        ball.left
+                        ball.y
                     </td>
                     <td>
-                        &nbsp;
-                        <input type="number" id="ballLeftDisplay" value="0" readonly />
+                        <input type="number" id="ballYDisplay" value="0" readonly />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        ball.top
+                    </td>
+                    <td>
+                        <input type="number" id="ballTopDisplay" value="0" readonly />
                     </td>
                 </tr>
                 <tr>
@@ -144,8 +161,23 @@
                         ball.right
                     </td>
                     <td>
-                        &nbsp;
                         <input type="number" id="ballRightDisplay" value="0" readonly />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        ball.bottom
+                    </td>
+                    <td>
+                        <input type="number" id="ballBottomDisplay" value="0" readonly />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        ball.left
+                    </td>
+                    <td>
+                        <input type="number" id="ballLeftDisplay" value="0" readonly />
                     </td>
                 </tr>
             </table>
@@ -156,122 +188,38 @@
     
     <script src="wall.js"></script>
     <script>
-        // document.querySelector("canvas").style.scale = 1 / devicePixelRatio;
-        const canvas = document.getElementById("myCanvas");
-        const ctx = canvas.getContext("2d");
-        canvas.width = 600;
-        canvas.height = 400;
+        const canvas  = document.getElementById("myCanvas");
+        const ctx     = canvas.getContext("2d");
+        canvas.width  = 600;
+        canvas.height = 350;
     </script>
     <script src="walls.js"></script>
+    <script src="ball.js"></script>
+    <script src="ui.js"></script>
     <script>
-        let ball = {
-            radius: 25,
-            x: canvas.width / 2,
-            y: canvas.height / 2,
-            xSpeed: 85,
-            xDir: Math.round(Math.random()) ? 1 : -1,
-            draw: function () {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                ctx.fillStyle = "hsl(0, 60%, 50%, 0.2)";
-                ctx.strokeStyle = "hsl(0, 60%, 50%, 0.2)";
-                ctx.fill();
-                ctx.stroke();
-            },
-            detectCollision: function () {
-                let result = {
-                    leftWall  : this.x - this.radius <= leftWall.x + leftWall.width,
-                    rightWall : this.x + this.radius >= rightWall.x,
-                    collides  : false,
-                };
-                result.collides = result.leftWall || result.rightWall;
-                return result;
-            },
-            move: function (elapsedFrameTime) {
-                this.x += getPixelInTime(this.xSpeed, elapsedFrameTime) * this.xDir;
-            },
-            resolveCollision: function (collision, elapsedFrameTime) {
-                // TODO: fix overshoot
-                ball.xDir *= -1;
-            },
-        };
-        
-        function getPixelInTime(pixelsPerSecond, elapsedFrameTime) {
-            return elapsedFrameTime / 1000 * pixelsPerSecond;
-        }
-        
         let fps = 60;
         let lastFrameTime = Date.now();
         let fpsInterval = 1000 / fps;
-        
         function draw() {
             let currentFrameTime = Date.now();
             let elapsedFrameTime = currentFrameTime - lastFrameTime;
-            if (elapsedFrameTime > fpsInterval || true) {
+            if (elapsedFrameTime > fpsInterval) {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 topWall.draw();
                 rightWall.draw();
                 bottomWall.draw();
                 leftWall.draw();
-                // ball.move(elapsedFrameTime);
-                // let collision = ball.detectCollision();
-                // if (collision.collides) {
-                //     ball.resolveCollision(collision, elapsedFrameTime);
-                // }
+                ball.move(elapsedFrameTime);
+                let collision = ball.detectCollision();
+                if (collision.collides) {
+                    ball.resolveCollision(collision, elapsedFrameTime);
+                }
                 ball.draw();
                 lastFrameTime = currentFrameTime - (elapsedFrameTime % fpsInterval);
             }
-            // updateStats();
-            // requestAnimationFrame(draw);
+            updateLiveStats();
+            requestAnimationFrame(draw);
         }
-        
-        UI: {
-            document.addEventListener("DOMContentLoaded", () => {
-                let fpsInput = document.querySelector("#fpsInput");
-                let canvasWidthInput = document.querySelector("#canvasWidthInput");
-                let wallWidthInput = document.querySelector("#wallWidthInput");
-                let ballRadiusInput = document.querySelector("#ballRadiusInput");
-                let ballXSpeedInput = document.querySelector("#ballXSpeedInput");
-                canvasWidthInput.addEventListener("input", () => {
-                    canvas.width = canvasWidthInput.valueAsNumber || 400;
-                    canvas.style.width  = canvas.width + "px";
-                    canvas.style.height = canvas.height + "px";
-                    rightWall.width = wallWidthInput.valueAsNumber || 400;
-                    rightWall.x = canvas.width - rightWall.width;
-                });
-                wallWidthInput.addEventListener("input", () => {
-                    leftWall.width = wallWidthInput.valueAsNumber || 400;
-                    rightWall.width = wallWidthInput.valueAsNumber || 400;
-                    rightWall.x = canvas.width - rightWall.width;
-                });
-                fpsInput.addEventListener("input", () => {
-                    fps = fpsInput.valueAsNumber || 60;
-                    fpsInterval = 1000 / fps;
-                });
-                ballRadiusInput.addEventListener("input", () => {
-                    ball.radius = ballRadiusInput.valueAsNumber || 50;
-                });
-                ballXSpeedInput.addEventListener("input", () => {
-                    ball.xSpeed = ballXSpeedInput.valueAsNumber || 50;
-                });
-                fpsInput.value = fps;
-                canvasWidthInput.value = canvas.width;
-                wallWidthInput.value = leftWall.width;
-                ballRadiusInput.value = ball.radius;
-                ballXSpeedInput.value = ball.xSpeed;
-                document.querySelector("#leftWallRightDisplay").value = leftWall.x + leftWall.width;
-                document.querySelector("#rightWallLeftDisplay").value = rightWall.x;
-            });
-            let ballXDisplay = document.querySelector("#ballXDisplay");
-            let ballLeftDisplay = document.querySelector("#ballLeftDisplay");
-            let ballRightDisplay = document.querySelector("#ballRightDisplay");
-            function updateStats() {
-                ballXDisplay.value = ball.x;
-                ballLeftDisplay.value = (ball.x - ball.radius).toFixed(3);
-                ballRightDisplay.value = (ball.x + ball.radius).toFixed(3);
-            }
-        }
-        
         draw();
     </script>
 </body>
