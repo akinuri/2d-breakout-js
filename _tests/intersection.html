@@ -50,7 +50,7 @@
     
     <div class="container">
         
-        <canvas id="myCanvas" width="600" height="200"></canvas>
+        <canvas id="myCanvas"></canvas>
         
         <div id="stats">
             
@@ -154,52 +154,16 @@
         
     </div>
     
+    <script src="wall.js"></script>
     <script>
         // document.querySelector("canvas").style.scale = 1 / devicePixelRatio;
-        
         const canvas = document.getElementById("myCanvas");
         const ctx = canvas.getContext("2d");
-        canvas.style.width  = canvas.width + "px";
-        canvas.style.height = canvas.height + "px";
-        
-        let leftWall = {
-            width: 100,
-            height: canvas.height,
-            x: 0,
-            y: 0,
-            draw: function () {
-                ctx.beginPath();
-                ctx.rect(this.x, this.y, this.width, this.height);
-                ctx.fillStyle = "hsl(0, 0%, 0%, 0.05)";
-                ctx.fill();
-                ctx.beginPath(this.x + this.width, this.y);
-                ctx.lineWidth = 1;
-                ctx.moveTo(this.x + this.width - 1 + 0.5, this.y);
-                ctx.lineTo(this.x + this.width - 1 + 0.5, this.y + this.height);
-                ctx.strokeStyle = "hsl(0, 0%, 0%, 0.1)";
-                ctx.stroke();
-            },
-        };
-        
-        let rightWall = {
-            width: 100,
-            height: canvas.height,
-            x: canvas.width - 100,
-            y: 0,
-            draw: function () {
-                ctx.beginPath();
-                ctx.rect(this.x, this.y, this.width, this.height);
-                ctx.fillStyle = "hsl(0, 0%, 0%, 0.05)";
-                ctx.fill();
-                ctx.beginPath(this.x, this.y);
-                ctx.lineWidth = 1;
-                ctx.moveTo(this.x + 0.5, this.y);
-                ctx.lineTo(this.x + 0.5, this.y + this.height);
-                ctx.strokeStyle = "hsl(0, 0%, 0%, 0.1)";
-                ctx.stroke();
-            },
-        };
-        
+        canvas.width = 600;
+        canvas.height = 400;
+    </script>
+    <script src="walls.js"></script>
+    <script>
         let ball = {
             radius: 25,
             x: canvas.width / 2,
@@ -243,20 +207,22 @@
         function draw() {
             let currentFrameTime = Date.now();
             let elapsedFrameTime = currentFrameTime - lastFrameTime;
-            if (elapsedFrameTime > fpsInterval ) {
+            if (elapsedFrameTime > fpsInterval || true) {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                leftWall.draw();
+                topWall.draw();
                 rightWall.draw();
-                ball.move(elapsedFrameTime);
-                let collision = ball.detectCollision();
-                if (collision.collides) {
-                    ball.resolveCollision(collision, elapsedFrameTime);
-                }
+                bottomWall.draw();
+                leftWall.draw();
+                // ball.move(elapsedFrameTime);
+                // let collision = ball.detectCollision();
+                // if (collision.collides) {
+                //     ball.resolveCollision(collision, elapsedFrameTime);
+                // }
                 ball.draw();
                 lastFrameTime = currentFrameTime - (elapsedFrameTime % fpsInterval);
             }
-            updateStats();
-            requestAnimationFrame(draw);
+            // updateStats();
+            // requestAnimationFrame(draw);
         }
         
         UI: {
@@ -293,7 +259,6 @@
                 wallWidthInput.value = leftWall.width;
                 ballRadiusInput.value = ball.radius;
                 ballXSpeedInput.value = ball.xSpeed;
-                
                 document.querySelector("#leftWallRightDisplay").value = leftWall.x + leftWall.width;
                 document.querySelector("#rightWallLeftDisplay").value = rightWall.x;
             });
