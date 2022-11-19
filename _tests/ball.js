@@ -16,19 +16,25 @@ let ball = {
     },
     detectCollision: function () {
         let result = {
-            leftWall  : this.x - this.radius <= leftWall.x + leftWall.width,
-            rightWall : this.x + this.radius >= rightWall.x,
-            collides  : false,
+            topWall    : this.y - this.radius <= topWall.x + topWall.height,
+            rightWall  : this.x + this.radius >= rightWall.x,
+            bottomWall : this.y + this.radius >= bottomWall.y,
+            leftWall   : this.x - this.radius <= leftWall.x + leftWall.width,
         };
-        result.collides = result.leftWall || result.rightWall;
+        result.collides = Object.values(result).includes(true);
         return result;
     },
     move: function (elapsedFrameTime) {
         this.x += getPixelInTime(this.xSpeed, elapsedFrameTime) * this.xDir;
+        this.y += getPixelInTime(this.ySpeed, elapsedFrameTime) * this.yDir;
     },
     resolveCollision: function (collision, elapsedFrameTime) {
         // TODO: fix overshoot
-        ball.xDir *= -1;
+        if (collision.topWall || collision.bottomWall) {
+            this.yDir *= -1;
+        } else {
+            this.xDir *= -1;
+        }
     },
 };
 
