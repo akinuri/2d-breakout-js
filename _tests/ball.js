@@ -26,7 +26,7 @@ let ball = {
     },
     move: function (elapsedFrameTime) {
         this.x += getPixelInTime(this.xSpeed, elapsedFrameTime) * this.xDir;
-        this.y += getPixelInTime(this.ySpeed, elapsedFrameTime) * this.yDir;
+        // this.y += getPixelInTime(this.ySpeed, elapsedFrameTime) * this.yDir;
     },
     resolveCollision: function (collision, elapsedFrameTime) {
         // TODO: fix overshoot
@@ -34,6 +34,20 @@ let ball = {
             this.yDir *= -1;
         } else {
             this.xDir *= -1;
+            
+            let gap       = 0;
+            let overshoot = 0;
+            let distance = getPixelInTime(ball.xSpeed, elapsedFrameTime);
+            if (collision.leftWall) {
+                gap       = (ball.x + distance) - (leftWall.x + leftWall.width + ball.radius);
+                overshoot = (leftWall.x + leftWall.width + ball.radius) - ball.x;
+                ball.x    = leftWall.x + leftWall.width + ball.radius + overshoot;
+            }
+            else if (collision.rightWall) {
+                gap       = (rightWall.x - ball.radius) - (ball.x - distance);
+                overshoot = ball.x - (rightWall.x - ball.radius);
+                ball.x    = rightWall.x - ball.radius - overshoot;
+            }
         }
     },
 };
