@@ -25,13 +25,27 @@ let ball = {
         return result;
     },
     move: function (elapsedFrameTime) {
-        this.x += getPixelInTime(this.xSpeed, elapsedFrameTime) * this.xDir;
-        // this.y += getPixelInTime(this.ySpeed, elapsedFrameTime) * this.yDir;
+        // this.x += getPixelInTime(this.xSpeed, elapsedFrameTime) * this.xDir;
+        this.y += getPixelInTime(this.ySpeed, elapsedFrameTime) * this.yDir;
     },
     resolveCollision: function (collision, elapsedFrameTime) {
-        // TODO: fix overshoot
+        // TODO: fix overshoot for non-perpendicular collisions
         if (collision.topWall || collision.bottomWall) {
             this.yDir *= -1;
+            
+            let gap       = 0;
+            let overshoot = 0;
+            let distance = getPixelInTime(ball.ySpeed, elapsedFrameTime);
+            if (collision.topWall) {
+                gap       = (ball.y + distance) - (topWall.y + topWall.height + ball.radius);
+                overshoot = (topWall.y + topWall.height + ball.radius) - ball.y;
+                ball.y    = topWall.y + topWall.height + ball.radius + overshoot;
+            }
+            else if (collision.bottomWall) {
+                gap       = (bottomWall.y - ball.radius) - (ball.y - distance);
+                overshoot = ball.y - (bottomWall.y - ball.radius);
+                ball.y    = bottomWall.y - ball.radius - overshoot;
+            }
         } else {
             this.xDir *= -1;
             
